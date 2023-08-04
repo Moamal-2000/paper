@@ -12,7 +12,10 @@ let isMsgActive = false;
 let paperData = []
 const paperDataLocal = localStorage.getItem("paper-data")
 if (paperDataLocal) {
-  paperData = JSON.parse(paperDataLocal)
+  const jsData = JSON.parse(paperDataLocal)
+  const numOfLines = jsData.length
+  paperData = jsData
+  createPaperInputs(numOfLines)
 }
 
 
@@ -29,7 +32,7 @@ function createPaperInputs(num) {
 
   Inputs.forEach((inp, i) => handleInput(inp, i, Inputs, paperData[i]));
 }
-createPaperInputs(13);
+if (!paperDataLocal) createPaperInputs(13)
 
 
 
@@ -47,8 +50,13 @@ function handleInput(inp, i, Inputs, paperData) {
     const isBackspaceClicked = code === "backspace" && prevInp && val === "";
 
     if (isEnterClicked) {
+      const inputs = document.querySelectorAll(".paper .content input")
+      const lastIndexInp = inputs.length - 2
+
       nextInp.focus();
       e.preventDefault();
+
+      if(i === lastIndexInp) createPaperInputs(1)
     }
 
     if (isBackspaceClicked) {
